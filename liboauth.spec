@@ -4,19 +4,20 @@
 #
 Name     : liboauth
 Version  : 1.0.3
-Release  : 8
+Release  : 9
 URL      : http://downloads.sourceforge.net/project/liboauth/liboauth-1.0.3.tar.gz
 Source0  : http://downloads.sourceforge.net/project/liboauth/liboauth-1.0.3.tar.gz
 Summary  : OAuth - server to server secure API authentication
 Group    : Development/Tools
-License  : GPL-2.0 MIT
-Requires: liboauth-lib
-Requires: liboauth-doc
+License  : GPL-2.0 MIT OpenSSL
+Requires: liboauth-lib = %{version}-%{release}
+Requires: liboauth-license = %{version}-%{release}
 BuildRequires : doxygen
 BuildRequires : graphviz
 BuildRequires : openssl-dev
 BuildRequires : pkgconfig(libcurl)
 BuildRequires : pkgconfig(nss)
+Patch1: liboauth-openssl_1.1_compatibility.patch
 
 %description
 liboauth is a collection of c functions implementing the http://oauth.net API.
@@ -28,46 +29,58 @@ the hash/signatures.
 %package dev
 Summary: dev components for the liboauth package.
 Group: Development
-Requires: liboauth-lib
-Provides: liboauth-devel
+Requires: liboauth-lib = %{version}-%{release}
+Provides: liboauth-devel = %{version}-%{release}
 
 %description dev
 dev components for the liboauth package.
 
 
-%package doc
-Summary: doc components for the liboauth package.
-Group: Documentation
-
-%description doc
-doc components for the liboauth package.
-
-
 %package lib
 Summary: lib components for the liboauth package.
 Group: Libraries
+Requires: liboauth-license = %{version}-%{release}
 
 %description lib
 lib components for the liboauth package.
 
 
+%package license
+Summary: license components for the liboauth package.
+Group: Default
+
+%description license
+license components for the liboauth package.
+
+
 %prep
 %setup -q -n liboauth-1.0.3
+%patch1 -p1
 
 %build
+export http_proxy=http://127.0.0.1:9/
+export https_proxy=http://127.0.0.1:9/
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
+export SOURCE_DATE_EPOCH=1542692210
 %configure --disable-static
-make V=1  %{?_smp_mflags}
+make  %{?_smp_mflags}
 
 %check
 export LANG=C
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
-export no_proxy=localhost
+export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
+export SOURCE_DATE_EPOCH=1542692210
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/liboauth
+cp COPYING %{buildroot}/usr/share/package-licenses/liboauth/COPYING
+cp COPYING.GPL %{buildroot}/usr/share/package-licenses/liboauth/COPYING.GPL
+cp COPYING.MIT %{buildroot}/usr/share/package-licenses/liboauth/COPYING.MIT
+cp LICENSE.OpenSSL %{buildroot}/usr/share/package-licenses/liboauth/LICENSE.OpenSSL
 %make_install
 
 %files
@@ -76,13 +89,18 @@ rm -rf %{buildroot}
 %files dev
 %defattr(-,root,root,-)
 /usr/include/*.h
-/usr/lib64/*.so
-/usr/lib64/pkgconfig/*.pc
-
-%files doc
-%defattr(-,root,root,-)
-%doc /usr/share/man/man3/*
+/usr/lib64/liboauth.so
+/usr/lib64/pkgconfig/oauth.pc
+/usr/share/man/man3/oauth.3
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/*.so.*
+/usr/lib64/liboauth.so.0
+/usr/lib64/liboauth.so.0.8.7
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/liboauth/COPYING
+/usr/share/package-licenses/liboauth/COPYING.GPL
+/usr/share/package-licenses/liboauth/COPYING.MIT
+/usr/share/package-licenses/liboauth/LICENSE.OpenSSL
