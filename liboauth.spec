@@ -4,9 +4,9 @@
 #
 Name     : liboauth
 Version  : 1.0.3
-Release  : 9
-URL      : http://downloads.sourceforge.net/project/liboauth/liboauth-1.0.3.tar.gz
-Source0  : http://downloads.sourceforge.net/project/liboauth/liboauth-1.0.3.tar.gz
+Release  : 10
+URL      : https://sourceforge.net/projects/liboauth/files/liboauth-1.0.3.tar.gz
+Source0  : https://sourceforge.net/projects/liboauth/files/liboauth-1.0.3.tar.gz
 Summary  : OAuth - server to server secure API authentication
 Group    : Development/Tools
 License  : GPL-2.0 MIT OpenSSL
@@ -62,7 +62,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1542692210
+export SOURCE_DATE_EPOCH=1545264400
 %configure --disable-static
 make  %{?_smp_mflags}
 
@@ -74,7 +74,7 @@ export no_proxy=localhost,127.0.0.1,0.0.0.0
 make VERBOSE=1 V=1 %{?_smp_mflags} check
 
 %install
-export SOURCE_DATE_EPOCH=1542692210
+export SOURCE_DATE_EPOCH=1545264400
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/liboauth
 cp COPYING %{buildroot}/usr/share/package-licenses/liboauth/COPYING
