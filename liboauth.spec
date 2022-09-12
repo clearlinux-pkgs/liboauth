@@ -4,7 +4,7 @@
 #
 Name     : liboauth
 Version  : 1.0.3
-Release  : 12
+Release  : 13
 URL      : https://sourceforge.net/projects/liboauth/files/liboauth-1.0.3.tar.gz
 Source0  : https://sourceforge.net/projects/liboauth/files/liboauth-1.0.3.tar.gz
 Summary  : OAuth - server to server secure API authentication
